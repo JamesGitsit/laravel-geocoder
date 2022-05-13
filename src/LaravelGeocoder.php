@@ -91,12 +91,12 @@ class LaravelGeocoder
    *
    * @return string
    */
-  private function getDefaultUrl()
+  private function getDefaultUrl($modeParams)
   {
     $url = $this->googleMapsUrl;
     $key = self::encodeURIComponent($this->googleMapsApiKey);
 
-    $url .= "?key=$key";
+    $url .= "?" . $modeParams . "&key=$key";
 
     $countryCode = $this->countryCode;
 
@@ -179,11 +179,10 @@ class LaravelGeocoder
    */
   private function getGoogleResponseFromLatLng($data)
   {
-    $url = $this->getDefaultUrl();
     $lat = self::encodeURIComponent($data['lat']);
     $lng = self::encodeURIComponent($data['lng']);
 
-    $url .= "&latlng=$lat,$lng";
+    $url = $this->getDefaultUrl("&latlng=$lat,$lng");
 
     return self::get($url);
   }
@@ -198,9 +197,7 @@ class LaravelGeocoder
   private function getGoogleResponseFromAddress($data)
   {
     $address = self::encodeURIComponent(self::toAddressString($data));
-    $url = $this->getDefaultUrl();
-
-    $url .= "&address=$address";
+    $url = $this->getDefaultUrl("&address=$address");
 
     return self::get($url);
   }
